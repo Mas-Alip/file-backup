@@ -1,0 +1,33 @@
+{
+  "criterion_field_map": {
+    "Usia": "usia",
+    "Pendapatan": "pendapatan",
+    "Pekerjaan": "pekerjaan",
+    "Jaminan": "jaminan"
+  },
+  "categorical_mappings": {
+    "usia_code": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 1
+    },
+    "pendapatan_code": {
+      "1": 1.0,
+      "2": 4.0,
+      "3": 3.5,
+      "4": 2.0
+    },
+    "pekerjaan_code": {
+      "1": 1.0,
+      "2": 3.5,
+      "3": 4.0,
+      "4": 3.0
+    },
+    "jaminan_code": {
+      "1": 4.0,
+      "2": 3.0,
+      "3": 1.0
+    }
+  }
+}
