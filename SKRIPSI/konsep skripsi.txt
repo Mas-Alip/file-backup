@@ -1,0 +1,129 @@
+
+
+## 🧠 Konsep Sistem
+
+### Judul:
+
+**Pengembangan Sistem Monitoring Okupansi Ruangan dengan ESP32 dan Notifikasi Real-Time berbasis Web Dashboard**
+
+---
+
+## 💡 Deskripsi Singkat:
+
+Sistem ini berfungsi untuk menampilkan **informasi penggunaan ruangan kelas secara real-time**, meliputi:
+
+* Ruangan mana yang sedang digunakan,
+* Siapa dosen pengajar,
+* Mata kuliah yang sedang berlangsung.
+
+Dosen tidak perlu mengetik manual — cukup memilih dari **dropdown list** yang sudah disediakan di **tablet/tampilan touchscreen**.
+Setelah memilih nama dan mata kuliah, dosen menekan tombol **“IN”** → menandakan bahwa ruangan sedang digunakan.
+Begitu dosen menekan tombol **“OUT”**, maka ruangan otomatis ditandai **kosong**.
+
+Informasi perubahan ini akan **langsung tampil di dashboard monitor utama** yang terhubung dengan jaringan lokal (WiFi).
+
+---
+
+## ⚙️ Komponen / Alat yang Dibutuhkan
+
+| No | Komponen                                                           | Jumlah                      | Fungsi                                                                                     |
+| -- | ------------------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------------------ |
+| 1  | **ESP32 (WiFi Ready)**                                             | 2 unit (1 Server, 1 Client) | - Server = pengelola data dan dashboard web <br> - Client = pengirim data dari ruang kelas |
+| 2  | **Tablet / Touchscreen (Android atau layar sentuh ESP32/Nextion)** | 2 unit (tiap ruangan)       | Input data dosen dan mata kuliah (melalui form web)                                        |
+| 3  | **Monitor / PC / Smart TV**                                        | 1 unit                      | Menampilkan dashboard web untuk seluruh ruangan                                            |
+| 4  | **Router WiFi / Hotspot lokal**                                    | 1 unit                      | Media komunikasi antar ESP32 dan monitor                                                   |
+| 5  | **Power Supply / Adaptor**                                         | -                           | Daya untuk ESP32 dan tablet                                                                |
+| 6  | **Database (MySQL / Firebase / TinyDB lokal)**                     | 1                           | Menyimpan daftar dosen, mata kuliah, dan status ruangan                                    |
+
+---
+
+## 🧩 Alur Sistem Kerja
+
+1. **Inisialisasi Sistem**
+
+   * ESP32 Server membuat *web dashboard* dan API endpoint untuk menerima data dari tiap ruangan.
+   * Database sudah berisi daftar dosen, mata kuliah, dan ruangan.
+
+2. **Input Data oleh Dosen**
+
+   * Dosen membuka web form di **tablet ruangan** (alamat lokal, contoh: `http://esp32client1.local`).
+   * Dosen memilih **Nama**, **Mata Kuliah**, dan **Ruangan** dari dropdown.
+   * Dosen menekan tombol **IN** untuk menandakan mulai mengajar.
+
+3. **Kirim Data ke Server**
+
+   * ESP32 Client di ruangan mengirim data JSON via WiFi ke ESP32 Server:
+
+     ```json
+     {
+       "ruangan": "Lab Komputer 1",
+       "dosen": "Budi Santoso",
+       "matkul": "Jaringan Komputer",
+       "status": "IN"
+     }
+     ```
+
+4. **Server Update Data**
+
+   * ESP32 Server menyimpan data ke database lokal.
+   * Web dashboard otomatis memperbarui tampilan (tanpa reload, pakai WebSocket atau refresh AJAX 2 detik).
+
+5. **Dashboard Monitoring**
+
+   * Monitor menampilkan status tiap ruangan:
+
+     | Ruangan | Dosen        | Mata Kuliah       | Status    |
+     | ------- | ------------ | ----------------- | --------- |
+     | Lab 1   | Budi Santoso | Jaringan Komputer | Digunakan |
+     | Lab 2   | -            | -                 | Kosong    |
+
+6. **Setelah Selesai**
+
+   * Dosen menekan tombol **OUT**, data dikirim ulang ke server → status ruangan kembali **Kosong**.
+
+---
+
+## 🛰️ Koneksi Antar Alat
+
+```
+[Tablet Ruang 1] → [ESP32 Client 1] ↘
+                                         ↘
+                                          [WiFi Router] → [ESP32 Server] → [Monitor Dashboard]
+                                         ↗
+[Tablet Ruang 2] → [ESP32 Client 2] ↗
+```
+
+Semua alat terhubung dalam **satu jaringan lokal WiFi**.
+Server bisa menggunakan **Static IP** agar dashboard mudah diakses oleh monitor.
+
+---
+
+## 🧰 Software Pendukung
+
+| Software                               | Fungsi                          |
+| -------------------------------------- | ------------------------------- |
+| **Arduino IDE**                        | Pemrograman ESP32               |
+| **HTML + CSS + JS (AJAX / WebSocket)** | Dashboard & Form input          |
+| **MySQL / Firebase (opsional)**        | Menyimpan data ruangan          |
+| **XAMPP / ESP32 WebServer Library**    | Server lokal untuk dashboard    |
+| **WiFiManager / WiFi.h**               | Penghubung jaringan antar ESP32 |
+
+---
+
+
+
+2.1 Landasan Teori
+
+ 2.1.1 Pengertian Internet of Things (IoT)
+ 2.1.2 Karakteristik IoT
+ 2.1.3 Komponen dan Arsitektur IoT
+ 2.1.4 Mikrokontroler ESP32 (sebagai Server dan Client)
+ 2.1.5 Komunikasi Data pada IoT (HTTP dan WebSocket)
+ 2.1.6 Dashboard Web Real-Time pada Sistem IoT
+ 2.1.7 Konsep Database dan Cloud Storage (Firebase/MySQL)
+ 2.1.8 Konsep Sistem Monitoring dan Okupansi Ruangan
+
+2.2 Tinjauan Pustaka
+
+ 2.2.1 Penelitian Terdahulu yang Relevan
+ 2.2.2 Analisis Perbandingan Penelitian Terdahulu
